@@ -1,0 +1,22 @@
+.TodoList {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: 300;
+    font-size: 24px;
+    color: #4d4d4d;
+    border-bottom: solid 1px #4d4d4d;
+}
+.TodoList:last-child {
+    border-bottom: none;
+}
+.TodoList-completed > p {
+    text-decoration: line-through;
+    opacity: .3 ;
+}
+.TodoList img {
+    width: 30px;
+    height: 30px;
+    margin: 0px 10px;
+    opacity: 1 !important;
+}
