@@ -1,12 +1,33 @@
-body{
+body {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 }
+
 .App {
   border: solid 1px #4d4d4d;
   width: 500px;
   overflow: hidden;
   margin: 15px;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #4d4d4d;
+  border-bottom: solid 1px #4d4d4d;
+  padding: 20px 0px;
+}
+.header > input {
+  font-weight: 300;
+  font-size: 24px;
+  border: none;
+}
+.header > input:focus {
+  outline: none;
+}
+.header > img {
+  margin: 0px 10px;
 }

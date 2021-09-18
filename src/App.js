@@ -2,16 +2,21 @@ import React, { Component } from 'react';
 import './App.css';
 import TodoList from './component/TodoList'
 
+import checkAllImg from './img/check-all.svg';
+
 class App extends Component {
   constructor() {
     super();
     this.state = {
+      inputAddValue: "",
       todoList: [
         { title: "mua đùi gà", isCompleted: true },
         { title: "chiên đùi gà", isCompleted: false },
         { title: "chiên cơm", isCompleted: false }
       ],
     }
+    this.onInputChange = this.onInputChange.bind(this);
+    this.onInputKeyEnter = this.onInputKeyEnter.bind(this);
   }
 
   onItemClicked = (even, item) => {
@@ -22,15 +27,41 @@ class App extends Component {
       todoList: newList,
     });
   }
+  onInputChange(even) {
+    this.setState(
+      { inputAddValue: even.target.value }
+    );
+  }
+  onInputKeyEnter(even) {
+    if (even.key === 'Enter' || even.keyCode === 13) {
+      let newTodoList = [
+        ...this.state.todoList,
+        { title: this.state.inputAddValue, isCompleted: false },
+      ];
+      this.setState(
+        {
+          todoList: newTodoList,
+          inputAddValue: "",
+        }
+      );
+    }
+  }
   render() {
     return (
       <div className="App">
+        <div className="header">
+          <img src={checkAllImg} alt="checkAllImg" width={32} height={32} />
+          <input placeholder="Add new item"
+            value={this.state.inputAddValue}
+            onChange={this.onInputChange}
+            onKeyUp={this.onInputKeyEnter} />
+        </div>
         {
           this.state.todoList.map((item, index) => {
             return (
-              <TodoList key={index} 
-              todoItem={item} 
-              onClick={(even)=>this.onItemClicked(even, item)} />
+              <TodoList key={index}
+                todoItem={item}
+                onClick={(even) => this.onItemClicked(even, item)} />
             );
           })
         }
