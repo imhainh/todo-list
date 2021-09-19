@@ -11,13 +11,20 @@ class App extends Component {
       inputAddValue: "",
       todoList: this.getTodoList() ? this.getTodoList() : []
     }
-    
+
+    this.inputElement = React.createRef(); // learn React.createRef() B1: inputElement là 1 React Ref (tham chiếu) chứ ko phải input DOM
+    // https://vi.reactjs.org/docs/refs-and-the-dom.html
+    // https://www.youtube.com/watch?v=AYpgu9Clof0&list=PLkY6Xj8Sg8-vV5kALCOT0LShKc6mVFBvW&index=21&ab_channel=CodersX
+
     this.onInputChange = this.onInputChange.bind(this);
     this.onInputKeyEnter = this.onInputKeyEnter.bind(this);
     this.onImgCheckAllClick = this.onImgCheckAllClick.bind(this);
   }
+  componentDidMount() {
+    this.inputElement.current.focus(); // learn React.createRef() B3: focus trỏ chuột vào ô input
+  }
   setTodoList(newTodoList) {
-    this.setState({todoList: newTodoList});
+    this.setState({ todoList: newTodoList });
     localStorage.setItem('todoList', JSON.stringify(newTodoList));
   }
   getTodoList() {
@@ -39,11 +46,11 @@ class App extends Component {
         { title: this.state.inputAddValue, isCompleted: false },
       ];
       this.setTodoList(newTodoList);
-      this.setState({inputAddValue: ""});
+      this.setState({ inputAddValue: "" });
     }
   }
-  onImgCheckAllClick(even){
-    let {todoList} = this.state;
+  onImgCheckAllClick(even) {
+    let { todoList } = this.state;
     let isCheckAll = (todoList.find((item) => item.isCompleted === false)) ? false : true;
     let todoListCheckedAll = todoList.map((item) => {
       item.isCompleted = !isCheckAll;
@@ -55,10 +62,11 @@ class App extends Component {
     return (
       <div className="App">
         <div className="header">
-          <img src={checkAllImg} alt="checkAllImg" 
-          width={32} height={32} 
-          onClick={this.onImgCheckAllClick} />
+          <img src={checkAllImg} alt="checkAllImg"
+            width={32} height={32}
+            onClick={this.onImgCheckAllClick} />
           <input placeholder="Add new item"
+            ref={this.inputElement} // learn React.createRef() B2: gán React Ref (tham chiếu) vào input với thuộc tính ref
             value={this.state.inputAddValue}
             onChange={this.onInputChange}
             onKeyUp={this.onInputKeyEnter} />
