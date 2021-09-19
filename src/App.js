@@ -17,6 +17,7 @@ class App extends Component {
     }
     this.onInputChange = this.onInputChange.bind(this);
     this.onInputKeyEnter = this.onInputKeyEnter.bind(this);
+    this.onImgCheckAllClick = this.onImgCheckAllClick.bind(this);
   }
 
   onItemClicked = (even, item) => {
@@ -46,11 +47,27 @@ class App extends Component {
       );
     }
   }
+  onImgCheckAllClick(even){
+    let {todoList} = this.state;
+    let isCheckAll = (todoList.find((item) => item.isCompleted === false)) ? false : true;
+    let todoListCheckedAll = todoList.map((item) => {
+      item.isCompleted = !isCheckAll;
+      return item;
+    });
+    this.setState(
+      { 
+        checkAllItems: !isCheckAll,
+        todoList: todoListCheckedAll
+      }
+    );
+  }
   render() {
     return (
       <div className="App">
         <div className="header">
-          <img src={checkAllImg} alt="checkAllImg" width={32} height={32} />
+          <img src={checkAllImg} alt="checkAllImg" 
+          width={32} height={32} 
+          onClick={this.onImgCheckAllClick} />
           <input placeholder="Add new item"
             value={this.state.inputAddValue}
             onChange={this.onInputChange}
