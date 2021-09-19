@@ -9,29 +9,28 @@ class App extends Component {
     super();
     this.state = {
       inputAddValue: "",
-      todoList: [
-        { title: "mua đùi gà", isCompleted: true },
-        { title: "chiên đùi gà", isCompleted: false },
-        { title: "chiên cơm", isCompleted: false }
-      ],
+      todoList: this.getTodoList() ? this.getTodoList() : []
     }
+    
     this.onInputChange = this.onInputChange.bind(this);
     this.onInputKeyEnter = this.onInputKeyEnter.bind(this);
     this.onImgCheckAllClick = this.onImgCheckAllClick.bind(this);
   }
-
+  setTodoList(newTodoList) {
+    this.setState({todoList: newTodoList});
+    localStorage.setItem('todoList', JSON.stringify(newTodoList));
+  }
+  getTodoList() {
+    return JSON.parse(localStorage.getItem('todoList'));
+  }
   onItemClicked = (even, item) => {
     let index = this.state.todoList.indexOf(item);
     const newList = [...this.state.todoList];
     newList[index].isCompleted = !newList[index].isCompleted;
-    this.setState({
-      todoList: newList,
-    });
+    this.setTodoList(newList);
   }
   onInputChange(even) {
-    this.setState(
-      { inputAddValue: even.target.value }
-    );
+    this.setState({ inputAddValue: even.target.value });
   }
   onInputKeyEnter(even) {
     if (even.key === 'Enter' || even.keyCode === 13) {
@@ -39,12 +38,8 @@ class App extends Component {
         ...this.state.todoList,
         { title: this.state.inputAddValue, isCompleted: false },
       ];
-      this.setState(
-        {
-          todoList: newTodoList,
-          inputAddValue: "",
-        }
-      );
+      this.setTodoList(newTodoList);
+      this.setState({inputAddValue: ""});
     }
   }
   onImgCheckAllClick(even){
@@ -54,12 +49,7 @@ class App extends Component {
       item.isCompleted = !isCheckAll;
       return item;
     });
-    this.setState(
-      { 
-        checkAllItems: !isCheckAll,
-        todoList: todoListCheckedAll
-      }
-    );
+    this.setTodoList(todoListCheckedAll);
   }
   render() {
     return (
@@ -73,15 +63,17 @@ class App extends Component {
             onChange={this.onInputChange}
             onKeyUp={this.onInputKeyEnter} />
         </div>
-        {
-          this.state.todoList.map((item, index) => {
-            return (
-              <TodoList key={index}
-                todoItem={item}
-                onClick={(even) => this.onItemClicked(even, item)} />
-            );
-          })
-        }
+        <div className="content">
+          {
+            this.state.todoList.map((item, index) => {
+              return (
+                <TodoList key={index}
+                  todoItem={item}
+                  onClick={(even) => this.onItemClicked(even, item)} />
+              );
+            })
+          }
+        </div>
       </div>
     );
   }
